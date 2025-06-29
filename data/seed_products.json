@@ -1,0 +1,32 @@
+[
+    {
+        "name": "Wireless Headphones",
+        "price": 59.99,
+        "image_url": "https://via.placeholder.com/250",
+        "description": "High-quality wireless headphones with noise cancellation."
+    },
+    {
+        "name": "Smart Watch",
+        "price": 129.99,
+        "image_url": "https://via.placeholder.com/250",
+        "description": "Track your fitness and notifications in style."
+    },
+    {
+        "name": "Bluetooth Speaker",
+        "price": 45.00,
+        "image_url": "https://via.placeholder.com/250",
+        "description": "Portable speaker with excellent sound clarity."
+    },
+    {
+        "name": "Gaming Mouse",
+        "price": 25.49,
+        "image_url": "https://via.placeholder.com/250",
+        "description": "Ergonomic design with customizable DPI settings."
+    },
+    {
+        "name": "4K Monitor",
+        "price": 299.99,
+        "image_url": "https://via.placeholder.com/250",
+        "description": "Ultra HD 4K monitor with vibrant colors and sharp display."
+    }
+]
