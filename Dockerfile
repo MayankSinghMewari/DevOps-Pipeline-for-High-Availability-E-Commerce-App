@@ -1,40 +1,42 @@
-# Use Python 3.9 slim image as base
-FROM python:3.9-slim
+# Use a lightweight Python base image
+FROM python:3.9-slim-buster
 
-# Set working directory in container
+# Set the working directory in the container
 WORKDIR /app
 
-# Set environment variables
-ENV PYTHONUNBUFFERED=1
-ENV PYTHONDONTWRITEBYTECODE=1
+# Set environment variables for Python to optimize container behavior
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    gcc \
-    g++ \
-    && rm -rf /var/lib/apt/lists/*
-
-# Copy requirements first for better Docker layer caching
+# Copy only the requirements file first to leverage Docker's cache
+# This ensures pip install step is re-run only if requirements.txt changes
 COPY requirements.txt .
 
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy application code
-COPY app.py .
-COPY README.md .
+# Copy the rest of your application code
+# This copies app.py, mongo-init.js, README.md, etc.
+COPY . .
 
-# Create a non-root user for security
+# Create a non-root user for security (Good practice!)
 RUN useradd --create-home --shell /bin/bash appuser && \
     chown -R appuser:appuser /app
 USER appuser
 
-# Expose the port Streamlit runs on
+# Expose the port Streamlit runs on (default for Streamlit)
 EXPOSE 8501
 
-# Health check
+# Health check (as defined in your original Dockerfile)
+# This is useful if you were to run the container directly with `docker run`
+# When using docker-compose, the healthcheck in docker-compose.yml takes precedence
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
     CMD curl -f http://localhost:8501/_stcore/health || exit 1
 
-# Run the Streamlit app
-CMD ["streamlit", "run", "app.py", "--server.port=8501", "--server.address=0.0.0.0", "--server.headless=true", "--server.fileWatcherType=none", "--browser.gatherUsageStats=false"]
+# Command to run the Streamlit application
+CMD ["streamlit", "run", "app.py", \
+    "--server.port=8501", \
+    "--server.address=0.0.0.0", \
+    "--server.headless=true", \
+    "--server.fileWatcherType=none", \
+    "--browser.gatherUsageStats=false"]
